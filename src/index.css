@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  .clip-triangle {
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  }
+
+  /* Liquid Glass Effect Utilities */
+  .glass-card {
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 
+      0 20px 40px -15px rgba(0, 0, 0, 0.5),
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.25),
+      inset 0 -1px 2px 0 rgba(0, 0, 0, 0.4);
+  }
+
+  .glass-card-emerald, .glass-card-purple {
+    background: rgba(28, 15, 48, 0.7);
+    backdrop-filter: blur(20px) saturate(190%);
+    -webkit-backdrop-filter: blur(20px) saturate(190%);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    box-shadow: 
+      0 20px 45px -10px rgba(168, 85, 247, 0.3),
+      inset 0 1px 2px 0 rgba(255, 255, 255, 0.35),
+      inset 0 -1px 4px 0 rgba(168, 85, 247, 0.2);
+  }
+
+  .liquid-orb-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .liquid-orb-glow {
+    position: absolute;
+    width: 140%;
+    height: 140%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(168,85,247,0.45) 0%, rgba(217,70,239,0.25) 50%, rgba(0,0,0,0) 70%);
+    filter: blur(24px);
+    animation: orbPulse 4s ease-in-out infinite alternate;
+  }
+
+  .liquid-orb-sphere {
+    position: relative;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.35) 0%, rgba(168, 85, 247, 0.25) 30%, rgba(15, 10, 30, 0.88) 75%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    box-shadow:
+      0 15px 35px rgba(0, 0, 0, 0.6),
+      0 0 35px rgba(168, 85, 247, 0.45),
+      inset 0 12px 18px rgba(255, 255, 255, 0.45),
+      inset 0 -15px 20px rgba(168, 85, 247, 0.4);
+  }
+
+  .liquid-button {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.9) 0%, rgba(147, 51, 234, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    box-shadow: 
+      0 12px 25px -5px rgba(168, 85, 247, 0.6),
+      inset 0 1px 2px 0 rgba(255, 255, 255, 0.6),
+      inset 0 -2px 4px 0 rgba(0, 0, 0, 0.25);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .liquid-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 
+      0 16px 30px -4px rgba(192, 132, 252, 0.75),
+      inset 0 1px 3px 0 rgba(255, 255, 255, 0.7);
+  }
+}
+
+@keyframes orbPulse {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  100% { transform: scale(1.08); opacity: 1; }
+}
+

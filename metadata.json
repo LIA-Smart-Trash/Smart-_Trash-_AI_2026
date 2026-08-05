@@ -1,0 +1,6 @@
+{
+  "name": "L.I.A - Lixeira Inteligente Autônoma",
+  "description": "Aplicativo de monitoramento em tempo real, controle de movimento, sensores IoT, summoning autônomo e históricos para a robô Lixeira Inteligente Autônoma (L.I.A) com visual Liquid Glass.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
