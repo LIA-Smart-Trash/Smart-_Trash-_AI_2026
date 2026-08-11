@@ -1,46 +1,171 @@
-# L.I.A - Lixeira Inteligente Autônoma 🤖🗑️
+🤖 L.I.A — Lixeira Inteligente Autônoma
+Smart Trash AI • Sistema de monitoramento e controle de uma lixeira robótica inteligente
 
-**L.I.A** (Lixeira Inteligente Autônoma) é uma aplicação moderna de monitoramento IoT e controle robótico autônomo para lixeiras inteligentes.
+📖 Sobre
 
-## 🚀 Funcionalidades
+A L.I.A (Lixeira Inteligente Autônoma) é uma plataforma desenvolvida para monitorar e controlar uma lixeira robótica, combinando IoT, robótica, automação e inteligência artificial.
 
-- **Dashboard de Telemetria IoT**: Acompanhamento em tempo real do nível de capacidade, carga de bateria, temperatura interna e status da tampa.
-- **Controle Robótico Autônomo**: Modos de chamada/invocação (Summon) com mapeamento GPS/sonar e seguimento inteligente.
-- **Alertas e Notificações**: Detecção de anomalias, recipiente cheio e lembretes de manutenção.
-- **Assistente IA Integrado**: Diagnósticos automatizados e sugestões inteligentes de reciclagem.
-- **Sons e Resposta Sonora**: Feedback tátil e auditivo para ações robóticas.
-- **Visualização Dupla**: Modo aplicativo móvel responsivo e dashboard expandido para telas grandes.
+O projeto possui dashboard web, interface mobile, telemetria simulada, controles do robô, sensores, alertas e assistente de IA.
 
-## 🛠️ Tecnologias Utilizadas
+Status: protótipo funcional. A integração com hardware real está em desenvolvimento.
 
-- **React 18** com **TypeScript**
-- **Vite**
-- **Tailwind CSS**
-- **Lucide React** (Ícones)
-- **Framer Motion** (Animações)
-- **Express / Node.js** (Backend API / Servidor)
+✨ Funcionalidades
 
-## 🔧 Como Executar Localmente
+🏠 Dashboard de monitoramento
 
-1. **Clone o repositório:**
-   ```bash
-   git clone https://github.com/dsouloficial/Lia-Smath-Trash-.git
-   cd Lia-Smath-Trash-
-   ```
+📱 Interface responsiva/mobile
 
-2. **Instale as dependências:**
-   ```bash
-   npm install
-   ```
+🎮 Controle de movimentação
 
-3. **Inicie o servidor de desenvolvimento:**
-   ```bash
-   npm run dev
-   ```
+🗑️ Controle da tampa
 
-4. **Abra no navegador:**
-   Navegue até `http://localhost:3000` ou `http://localhost:5173`.
+💡 Controle de LEDs
 
----
+📡 Telemetria e sensores
 
-Desenvolvido para gerenciamento inteligente de resíduos e automação de limpeza urbana/doméstica.
+🚨 Sistema de alertas
+
+📊 Histórico de eventos
+
+🧭 Modo Summon
+
+👤 Modo Follow
+
+🧠 Assistente de IA
+
+🔊 Sistema de áudio
+
+📱 Aplicação Android via Capacitor
+
+🛠️ Tecnologias
+
+React 19
+
+TypeScript
+
+Vite
+
+Tailwind CSS
+
+Lucide React
+
+Recharts
+
+Node.js
+
+Express
+
+Google Gemini
+
+Capacitor
+
+Android
+
+📁 Estrutura
+
+src/
+├── assets/
+├── components/
+│   └── views/
+├── lib/
+├── App.tsx
+├── index.css
+├── main.tsx
+└── types.ts
+
+android/
+server.ts
+package.json
+vite.config.ts
+capacitor.config.ts
+
+🚀 Instalação
+
+Clone o projeto:
+
+git clone https://github.com/LIA-Smart-Trash/Smart-_Trash-_AI_2026.git
+cd Smart-_Trash-_AI_2026
+
+Instale as dependências:
+
+npm install
+
+Execute:
+
+npm run dev
+
+A aplicação estará disponível em:
+
+http://localhost:3000
+
+🏗️ Build
+
+npm run build
+
+Para sincronizar com Android:
+
+npx cap sync android
+npx cap open android
+
+🧠 Inteligência Artificial
+
+A aplicação possui integração preparada com Google Gemini.
+
+Crie um arquivo .env:
+
+GEMINI_API_KEY=SUA_CHAVE_AQUI
+
+Nunca publique chaves de API no GitHub.
+
+📡 Futuro hardware
+
+A arquitetura foi preparada para integração com ESP32 e sensores reais:
+
+L.I.A App
+│
+▼
+Backend / API
+│
+▼
+ESP32
+│
+├── Sensores
+├── Motores
+├── Servo da tampa
+└── LEDs
+
+🔮 Roadmap
+
+Interface de controle
+
+Dashboard
+
+Telemetria simulada
+
+Alertas
+
+Assistente IA
+
+Projeto Android
+
+Integração com ESP32
+
+Sensores reais
+
+Controle dos motores
+
+Navegação autônoma
+
+Follow real
+
+Classificação de resíduos
+
+Publicação na Google Play
+
+🌱 Visão
+
+A L.I.A busca unir:
+
+IoT + Robótica + Inteligência Artificial + Sustentabilidade
+
+para transformar a gestão de resíduos em uma experiência mais inteligente e autônoma.
