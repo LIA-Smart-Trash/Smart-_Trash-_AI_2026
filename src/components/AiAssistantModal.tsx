@@ -4,6 +4,8 @@ import { Bot, Mic, Send, Sparkles, X, Volume2 } from 'lucide-react';
 import { LiaTelemetry } from '../types';
 import { sound } from '../lib/soundEngine';
 
+import { isNative } from '../lib/device';
+
 interface AiAssistantModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -71,9 +73,9 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
   };
 
   const startVoiceInput = () => {
-    if (typeof window !== 'undefined' && 'webkitSpeechRecognition' in window) {
+    if (typeof window !== 'undefined' && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
       try {
-        const SpeechRecognition = (window as any).webkitSpeechRecognition;
+        const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
         const recognition = new SpeechRecognition();
         recognition.lang = 'pt-BR';
         recognition.onstart = () => setIsListening(true);
@@ -86,10 +88,10 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
         recognition.start();
       } catch {
         setIsListening(false);
-        alert('Reconhecimento de voz indisponível neste navegador. Digite seu comando!');
+        alert('Reconhecimento de voz indisponível neste dispositivo. Digite seu comando!');
       }
     } else {
-      alert('Reconhecimento de voz não suportado neste navegador. Utilize o campo de texto.');
+      alert('Reconhecimento de voz não suportado neste ambiente. Utilize o campo de texto.');
     }
   };
 
@@ -97,15 +99,19 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+      <div className={`fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-md ${isNative() ? 'p-0' : 'p-4'}`}>
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          initial={{ opacity: 0, scale: 0.9, y: 100 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative w-full max-w-lg rounded-3xl bg-slate-900 border border-emerald-500/30 p-5 shadow-[0_0_50px_rgba(16,185,129,0.2)] flex flex-col h-[520px]"
+          exit={{ opacity: 0, scale: 0.9, y: 100 }}
+          className={`relative w-full max-w-lg bg-slate-900 border border-emerald-500/30 shadow-[0_0_50px_rgba(16,185,129,0.2)] flex flex-col ${
+            isNative()
+              ? 'h-dvh rounded-none pt-safe pb-safe'
+              : 'h-[520px] max-h-[90vh] rounded-3xl p-5'
+          }`}
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-3">
+          <div className={`flex items-center justify-between border-b border-white/10 pb-3 mb-3 ${isNative() ? 'p-4' : ''}`}>
             <div className="flex items-center gap-2.5">
               <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
                 <Bot className="w-5 h-5" />
@@ -115,7 +121,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
                   Assistente IA L.I.A
                   <Sparkles className="w-4 h-4 text-emerald-400" />
                 </h3>
-                <p className="text-xs text-slate-400">Gemini 2.5 Flash • Comandos em Português</p>
+                <p className="text-[10px] text-slate-400">Gemini 2.5 Flash • Comandos em Português</p>
               </div>
             </div>
             <button
@@ -127,7 +133,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
           </div>
 
           {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
+          <div className={`flex-1 overflow-y-auto space-y-3 pr-1 text-xs ${isNative() ? 'px-4' : ''}`}>
             {messages.map((m, idx) => (
               <div
                 key={idx}
@@ -158,7 +164,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
           </div>
 
           {/* Quick Command Chips */}
-          <div className="flex items-center gap-1.5 py-2 overflow-x-auto no-scrollbar border-t border-white/5 mt-2">
+          <div className={`flex items-center gap-1.5 py-2 overflow-x-auto no-scrollbar border-t border-white/5 mt-2 ${isNative() ? 'px-4' : ''}`}>
             {[
               'Venha até mim',
               'Abra a tampa',
@@ -177,7 +183,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
           </div>
 
           {/* Input Bar */}
-          <div className="flex items-center gap-2 pt-2 border-t border-white/10">
+          <div className={`flex items-center gap-2 pt-2 border-t border-white/10 ${isNative() ? 'p-4 pb-safe' : ''}`}>
             <button
               onClick={startVoiceInput}
               className={`p-2.5 rounded-xl border transition-colors cursor-pointer ${
@@ -192,7 +198,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
 
             <input
               type="text"
-              placeholder="Digite um comando (ex: 'LIA venha aqui')..."
+              placeholder="Digite um comando..."
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}

@@ -16,12 +16,20 @@ import { AiAssistantModal } from './components/AiAssistantModal';
 import { AppView, DisplayMode, LiaTelemetry, RobotPosition, LiaAlert, CollectionLog, SensorHistoryPoint } from './types';
 import { initialTelemetry, initialCollectionLogs, initialAlerts, initialSensorHistory } from './lib/mockData';
 import { sound } from './lib/soundEngine';
+import { isNative } from './lib/device';
 
 export function App() {
-  const [displayMode, setDisplayMode] = useState<DisplayMode>('mobile');
+  const [displayMode, setDisplayMode] = useState<DisplayMode>(isNative() ? 'mobile' : 'dashboard');
   const [currentView, setCurrentView] = useState<AppView>('home');
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [isAiOpen, setIsAiOpen] = useState<boolean>(false);
+
+  // Set initial display mode based on platform
+  useEffect(() => {
+    if (isNative()) {
+      setDisplayMode('mobile');
+    }
+  }, []);
 
   // Core L.I.A Telemetry & State
   const [telemetry, setTelemetry] = useState<LiaTelemetry>(initialTelemetry);
@@ -160,32 +168,35 @@ export function App() {
   const unreadAlertsCount = alerts.filter((a) => !a.read).length;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans p-4 md:p-8 flex flex-col items-center justify-start selection:bg-emerald-500 selection:text-slate-950">
+    <div className={`min-h-dvh bg-slate-950 text-slate-100 font-sans ${isNative() ? 'p-0 overflow-hidden' : 'p-4 md:p-8 flex flex-col items-center justify-start'} selection:bg-emerald-500 selection:text-slate-950`}>
       {/* Background ambient lighting glows */}
       <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-teal-500/10 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Main Top Header */}
-      <Header
-        displayMode={displayMode}
-        onToggleDisplayMode={setDisplayMode}
-        onOpenAi={() => setIsAiOpen(true)}
-        soundEnabled={soundEnabled}
-        onToggleSound={() => {
-          const next = !soundEnabled;
-          setSoundEnabled(next);
-          sound.enabled = next;
-        }}
-        onSimulateDataPulse={handleSimulateDataPulse}
-      />
+      {/* Main Top Header - Only show if not native or if we want a global header */}
+      {(!isNative() || displayMode === 'desktop') && (
+        <Header
+          displayMode={displayMode}
+          onToggleDisplayMode={setDisplayMode}
+          onOpenAi={() => setIsAiOpen(true)}
+          soundEnabled={soundEnabled}
+          onToggleSound={() => {
+            const next = !soundEnabled;
+            setSoundEnabled(next);
+            sound.enabled = next;
+          }}
+          onSimulateDataPulse={handleSimulateDataPulse}
+        />
+      )}
 
       {/* Main View Area */}
-      <main className="w-full flex justify-center items-start">
+      <main className={`w-full h-full flex justify-center items-start ${isNative() ? 'flex-1' : ''}`}>
         {displayMode === 'mobile' ? (
           <MobileFrame
             currentView={currentView}
             onSelectView={setCurrentView}
             unreadAlertsCount={unreadAlertsCount}
+            onOpenAi={() => setIsAiOpen(true)}
           >
             {currentView === 'home' && (
               <HomeView

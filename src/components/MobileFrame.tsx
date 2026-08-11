@@ -1,14 +1,17 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Home, Gamepad2, Navigation, UserCheck, Activity, Lock, Settings, Bell } from 'lucide-react';
+import { Home, Gamepad2, Navigation, UserCheck, Activity, Lock, Settings, Bell, Bot, Sparkles } from 'lucide-react';
 import { AppView } from '../types';
 import { sound } from '../lib/soundEngine';
+import { isNative } from '../lib/device';
+import { LiaLogo } from './LiaLogo';
 
 interface MobileFrameProps {
   currentView: AppView;
   onSelectView: (view: AppView) => void;
   children: React.ReactNode;
   unreadAlertsCount: number;
+  onOpenAi?: () => void;
 }
 
 export const MobileFrame: React.FC<MobileFrameProps> = ({
@@ -16,6 +19,7 @@ export const MobileFrame: React.FC<MobileFrameProps> = ({
   onSelectView,
   children,
   unreadAlertsCount,
+  onOpenAi,
 }) => {
   const navItems = [
     { id: 'home' as AppView, label: 'Início', icon: Home },
@@ -28,27 +32,50 @@ export const MobileFrame: React.FC<MobileFrameProps> = ({
     { id: 'alerts' as AppView, label: 'Alertas', icon: Bell, badge: unreadAlertsCount },
   ];
 
+  const frameClasses = isNative()
+    ? "relative w-full h-dvh bg-slate-950 flex flex-col overflow-hidden select-none"
+    : "relative mx-auto w-full max-w-[420px] h-[840px] rounded-[48px] bg-slate-950 p-4 border-[6px] border-purple-950/60 shadow-[0_0_90px_rgba(168,85,247,0.35)] flex flex-col overflow-hidden ring-1 ring-purple-500/20 select-none";
+
   return (
-    <div className="relative mx-auto w-full max-w-[420px] h-[840px] rounded-[48px] bg-slate-950 p-4 border-[6px] border-purple-950/60 shadow-[0_0_90px_rgba(168,85,247,0.35)] flex flex-col overflow-hidden ring-1 ring-purple-500/20 select-none">
-      {/* Dynamic Notch / Camera Island */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 z-40 w-36 h-7 rounded-b-2xl bg-black border-x border-b border-purple-500/20 flex items-center justify-between px-4">
-        <span className="text-[10px] font-mono text-purple-400 font-bold">09:30</span>
-        <div className="w-3 h-3 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center">
-          <div className="w-1.5 h-1.5 rounded-full bg-fuchsia-500/80" />
+    <div className={frameClasses}>
+      {/* Dynamic Notch / Camera Island (Only for Web Preview) */}
+      {!isNative() && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-40 w-36 h-7 rounded-b-2xl bg-black border-x border-b border-purple-500/20 flex items-center justify-between px-4">
+          <span className="text-[10px] font-mono text-purple-400 font-bold">09:30</span>
+          <div className="w-3 h-3 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-fuchsia-500/80" />
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+            <span className="text-[9px] text-slate-400 font-mono">5G</span>
+          </div>
         </div>
-        <div className="flex items-center gap-1">
-          <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
-          <span className="text-[9px] text-slate-400 font-mono">5G</span>
-        </div>
-      </div>
+      )}
+
+      {/* App Header (Native Mode Only) */}
+      {isNative() && (
+        <header className="pt-safe px-4 py-2 flex items-center justify-between border-b border-purple-500/20 bg-slate-950/50 backdrop-blur-md z-40">
+          <LiaLogo size="sm" showText={true} />
+
+          <button
+            onClick={() => {
+              sound.playClick();
+              onOpenAi?.();
+            }}
+            className="p-2 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 shadow-lg active:scale-95 transition-all"
+          >
+            <Bot className="w-5 h-5" />
+          </button>
+        </header>
+      )}
 
       {/* Main Viewport Content */}
-      <div className="flex-1 overflow-y-auto no-scrollbar pt-8 px-1">
+      <div className={`flex-1 overflow-y-auto no-scrollbar pt-8 px-1 ${isNative() ? 'pb-24' : ''}`}>
         {children}
       </div>
 
       {/* Floating Liquid Glass Bottom Navigation Bar */}
-      <div className="absolute bottom-3 left-3 right-3 z-30 p-1.5 rounded-2xl bg-slate-900/95 border border-purple-500/30 backdrop-blur-2xl shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+      <div className={`absolute bottom-3 left-3 right-3 z-30 p-1.5 rounded-2xl bg-slate-900/95 border border-purple-500/30 backdrop-blur-2xl shadow-[0_10px_30px_rgba(0,0,0,0.8)] ${isNative() ? 'mb-safe' : ''}`}>
         <div className="grid grid-cols-8 gap-0.5">
           {navItems.map((item) => {
             const IconComp = item.icon;
